@@ -23,3 +23,9 @@
     - `uv run mcp_chatbot.py`
 - To exit the chatbot, type `quit`.
 
+### 3. Test case
+
+input
+```md
+**Fetch the content of this website: https://modelcontextprotocol.io/docs/learn/architecture ** and save the content in the file "mcp_summary.md". **Create a visual diagram that summarizes the content of "mcp_summary.md" and save it in a text file**
+```
