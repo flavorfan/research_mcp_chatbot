@@ -74,8 +74,8 @@ class MCP_ChatBot:
     async def process_query(self, query):
         print(f"\nProcessing query: {query}")
         messages = [{'role':'user', 'content':query}]
-        process_query = True
-        while process_query:
+        # process_query = True
+        while True:
             # assistant_content = []
             resp = self.llm.chat.completions.create(
                 model = self.model_name,
@@ -85,6 +85,7 @@ class MCP_ChatBot:
                 max_tokens = 2024,
                 temperature = 0.0
             )
+            has_tool_use = False
             msg = resp.choices[0].message
             messages.append(msg)
             # print(f"msg: {msg.model_dump_json(indent=2)}")
@@ -92,24 +93,27 @@ class MCP_ChatBot:
             if not msg.tool_calls:
                 # If no tool calls, just print the response text
                 print(msg.content)
-                process_query = False
-                continue
-            for tc in msg.tool_calls:
-                print(f" {tc.function.name} : {tc.function.arguments}")
-                # Get session and call tool
-                # session = self.sessions[tc.function.name] # new
-                session = self.sessions.get(tc.function.name)
-                if not session:
-                    print(f"Tool {tc.function.name} not found in available sessions.")
-                    break
+                # process_query = False
+            else:
+                for tc in msg.tool_calls:
+                    has_tool_use = True
+                    print(f" {tc.function.name} : {tc.function.arguments}")
+                    # Get session and call tool
+                    # session = self.sessions[tc.function.name] # new
+                    session = self.sessions.get(tc.function.name)
+                    if not session:
+                        print(f"Tool {tc.function.name} not found in available sessions.")
+                        break
 
-                result = await session.call_tool(tc.function.name, json.loads(tc.function.arguments))
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tc.id,
-                    "content": result.content
-                })
-                print(f"Tool call result: {result}") 
+                    result = await session.call_tool(tc.function.name, json.loads(tc.function.arguments))
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": result.content
+                    })
+                    print(f"Tool call result: {result}") 
+            if not has_tool_use:
+                break
 
     async def get_resource(self, resource_uri):
         session = self.sessions.get(resource_uri)
@@ -168,7 +172,8 @@ class MCP_ChatBot:
                 elif hasattr(prompt_content, 'text'):
                     text = prompt_content.text
                 else:
-                    text = " ".join(item.text if hasattr(item, 'text') else str(item) for item in prompt_content)
+                    text = " ".join(item.text if hasattr(item, 'text') else str(item) 
+                                    for item in prompt_content)
                 print(f"\nExecution prompt '{prompt_name}' {text}...")
                 await self.process_query(text)
 
