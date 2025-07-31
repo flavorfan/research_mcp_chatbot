@@ -23,7 +23,7 @@
     - `uv run mcp_chatbot.py`
 - To exit the chatbot, type `quit`.
 
-### 3. Test case
+### 3. Test Multi MCP Server (Reference MCP Server)
 
 input
 ```md
@@ -31,7 +31,7 @@ input
 ```
 
 
-### test case
+### test: Add prompts, resources and change the chatbot loop
 
 @folders
 
