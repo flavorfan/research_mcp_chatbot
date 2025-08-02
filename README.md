@@ -73,6 +73,8 @@ echo "python-3.12.10" > runtime.txt
 
 ### setup render
 https://render.com/
+github account as account
+
 
 ```text
 add github repo to web deployment
