@@ -54,3 +54,34 @@ npx @modelcontextprotocol/inspector
 # Proxy Address: http://localhost:6277
 # Proxy session token: xxx
 ```
+
+## Ready for Deployment
+```shell
+
+git init
+
+echo ".venv" >> .gitignore
+
+# check denpendencies
+uv pip compile pyproject.toml
+
+uv pip compile pyproject.toml > requirements.txt
+
+# specify the Python version
+echo "python-3.12.10" > runtime.txt
+```
+
+### setup render
+https://render.com/
+
+```text
+add github repo to web deployment
+https://dashboard.render.com/web/new
+
+start command
+    python research_server.py
+
+```
+check the url 
+https://research-mcp-chatbot.onrender.com/sse
+
