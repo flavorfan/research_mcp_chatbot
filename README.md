@@ -31,7 +31,7 @@ input
 ```
 
 
-### test: Add prompts, resources and change the chatbot loop
+### 4. test: Add prompts, resources and change the chatbot loop
 
 @folders
 
@@ -40,3 +40,17 @@ input
 /prompts
 
 /prompt generate_search_prompt topic=math
+
+## convert to sse 
+```shell
+# start the MCP server
+uv run research_server.py
+
+# launch the inspector
+npx @modelcontextprotocol/inspector
+
+# convir
+# Transport type: SSE
+# Proxy Address: http://localhost:6277
+# Proxy session token: xxx
+```
